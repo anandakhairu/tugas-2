@@ -1,3 +1,4 @@
+//2.1
 const products = [
   { id: 1, title: "Laptop Asus ROG", price: 1200, category: "laptops", stock: 5 },
   { id: 2, title: "Smartphone Galaxy S23", price: 800, category: "phones", stock: 15 },
@@ -37,10 +38,12 @@ function findProductById(products, id) {
 
 console.log(findProductById(products, 3)); 
 
+//2.2
 const lowStockProducts = products.filter(product => product.stock < 10);
 
 console.log(lowStockProducts);
 
+//2.3
 function updateStock(products, id, newStock) {
   return products.map(p => 
     p.id === id ? { ...p, stock: newStock } : p
