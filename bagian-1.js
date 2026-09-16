@@ -1,9 +1,11 @@
+//1.1
 function calculateDiscountedPrice(price, discountPercent) {
   return price - (price * discountPercent) / 100;
 }
 
 console.log(calculateDiscountedPrice(1000, 10)); 
 
+//1.2
 const cart = [
   { title: "Laptop", price: 1000, discountPercent: 10 },
   { title: "Mouse", price: 20, discountPercent: 5 },
