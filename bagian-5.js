@@ -1,33 +1,53 @@
+//5.1 Rata-Rata Harga Laptop
 const laptopPrices = products
-  .filter(p => p.category === "laptops")
-  .map(p => p.price);
+    .filter(product => product.category === "laptops")
+    .map(product => product.price);
 
-const avgLaptopPrice = laptopPrices.reduce((a, b) => a + b, 0) / laptopPrices.length;
-console.log("Rata-rata Harga Laptop:", avgLaptopPrice);
+const averageLaptopPrice =
+    laptopPrices.reduce((total, price) => total + price, 0)
+    / laptopPrices.length;
 
+console.log(averageLaptopPrice);
 
+//5.2 getStatistics()
 function getStatistics(products) {
-  if (products.length === 0) return {};
+    const totalProducts = products.length;
 
-  const totalProducts = products.length;
-  const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
-  const totalPrice = products.reduce((sum, p) => sum + p.price, 0);
-  const averagePrice = totalPrice / totalProducts;
+    const totalPrice = products.reduce(
+        (sum, product) => sum + product.price,
+        0
+    );
 
-  const highestPrice = Math.max(...products.map(p => p.price));
-  const lowestPrice = Math.min(...products.map(p => p.price));
+    const averagePrice = totalPrice / totalProducts;
 
-  const totalRating = products.reduce((sum, p) => sum + p.rating, 0);
-  const averageRating = totalRating / totalProducts;
+    const highestPrice = Math.max(
+        ...products.map(product => product.price)
+    );
 
-  return {
-    totalProducts,
-    averagePrice,
-    highestPrice,
-    lowestPrice,
-    totalStock,
-    averageRating
-  };
+    const lowestPrice = Math.min(
+        ...products.map(product => product.price)
+    );
+
+    const totalStock = products.reduce(
+        (sum, product) => sum + product.stock,
+        0
+    );
+
+    const totalRating = products.reduce(
+        (sum, product) => sum + product.rating,
+        0
+    );
+
+    const averageRating = totalRating / totalProducts;
+
+    return {
+        totalProducts,
+        averagePrice,
+        highestPrice,
+        lowestPrice,
+        totalStock,
+        averageRating
+    };
 }
 
-console.log("Statistik Produk:", getStatistics(products));
+console.log(getStatistics(products));
