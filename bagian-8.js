@@ -1,31 +1,43 @@
+//8.1
 function bubbleSort(numbers) {
-  const arr = [...numbers];
-  for (let i = 0; i < arr.length - 1; i++) {
-    for (let j = 0; j < arr.length - 1 - i; j++) {
-      if (arr[j] > arr[j + 1]) {
-        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-      }
+    const arr = [...numbers];
+
+    for (let i = 0; i < arr.length - 1; i++) {
+        for (let j = 0; j < arr.length - 1 - i; j++) {
+            if (arr[j] > arr[j + 1]) {
+                [arr[j], arr[j + 1]] =
+                [arr[j + 1], arr[j]];
+            }
+        }
     }
-  }
-  return arr;
+
+    return arr;
 }
 
-console.log("Bubble Sort Manual:", bubbleSort([5, 3, 8, 1]));
+const numbers = [5, 3, 8, 1, 4];
 
+console.log(bubbleSort(numbers));
+
+//8.2
 function sortProducts(products, sortBy) {
-  const sorted = [...products];
+    const result = [...products];
 
-  if (sortBy === "price-asc") {
-    return sorted.sort((a, b) => a.price - b.price);
-  } else if (sortBy === "price-desc") {
-    return sorted.sort((a, b) => b.price - a.price);
-  } else if (sortBy === "rating") {
-    return sorted.sort((a, b) => b.rating - a.rating);
-  } else if (sortBy === "title") {
-    return sorted.sort((a, b) => a.title.localeCompare(b.title));
-  }
+    switch (sortBy) {
+        case "price-asc":
+            return result.sort((a, b) => a.price - b.price);
 
-  return sorted;
+        case "price-desc":
+            return result.sort((a, b) => b.price - a.price);
+
+        case "rating":
+            return result.sort((a, b) => b.rating - a.rating);
+
+        case "title":
+            return result.sort((a, b) =>
+                a.title.localeCompare(b.title)
+            );
+
+        default:
+            return result;
+    }
 }
-
-console.log("Sort by Rating:", sortProducts(products, "rating"));
