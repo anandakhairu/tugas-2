@@ -1,19 +1,28 @@
+//9.1
 function groupByCategory(products) {
-  return products.reduce((groups, product) => {
-    const key = product.category;
-    if (!groups[key]) groups[key] = [];
-    groups[key].push(product);
-    return groups;
-  }, {});
+    return products.reduce((groups, product) => {
+        const key = product.category;
+
+        if (!groups[key]) {
+            groups[key] = [];
+        }
+
+        groups[key].push(product);
+
+        return groups;
+    }, {});
 }
 
 const groupedProducts = groupByCategory(products);
-console.log("Grouped Products:", groupedProducts);
 
+console.log(groupedProducts);
 
-console.table(
-  Object.keys(groupedProducts).map(cat => ({
-    Category: cat,
-    TotalProducts: groupedProducts[cat].length
-  }))
+//9.2
+const categorySummary = Object.entries(groupedProducts).map(
+    ([category, products]) => ({
+        category: category,
+        totalProducts: products.length
+    })
 );
+
+console.table(categorySummary);
