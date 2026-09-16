@@ -1,16 +1,32 @@
+//10.1
 function countFrequency(array) {
-  return array.reduce((counts, item) => {
-    counts[item] = (counts[item] || 0) + 1;
-    return counts;
-  }, {});
+    return array.reduce((counts, item) => {
+        counts[item] = (counts[item] || 0) + 1;
+        return counts;
+    }, {});
 }
 
+const words = [
+    "laptop",
+    "phone",
+    "laptop",
+    "tablet",
+    "phone",
+    "laptop"
+];
 
-const categoryFreq = countFrequency(products.map(p => p.category));
-const allTagsFlat = nestedProducts.flatMap(p => p.tags);
-const tagFreq = countFrequency(allTagsFlat);
-const ratingFreq = countFrequency(products.map(p => Math.round(p.rating)));
+console.log(countFrequency(words));
 
-console.log("Frekuensi Kategori:", categoryFreq);
-console.log("Frekuensi Tag:", tagFreq);
-console.log("Frekuensi Rating:", ratingFreq);
+//10.2 Frekuensi category:
+const categoryFrequency = countFrequency(
+    products.map(product => product.category)
+);
+
+console.log(categoryFrequency);
+
+//10.2 Frekuensi tag:
+const tagFrequency = countFrequency(
+    products.flatMap(product => product.tags)
+);
+
+console.log(tagFrequency);
