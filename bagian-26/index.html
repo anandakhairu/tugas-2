@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Product Explorer</title>
+</head>
+
+<body>
+
+    <h1>Product Explorer</h1>
+
+    <div id="status"></div>
+
+    <h2>Search & Filter</h2>
+
+    <input
+        type="text"
+        id="search"
+        placeholder="Search product..."
+    >
+
+    <select id="category">
+        <option value="all">
+            All Categories
+        </option>
+    </select>
+
+    <select id="sort">
+
+        <option value="default">
+            Default
+        </option>
+
+        <option value="price-asc">
+            Price: Low to High
+        </option>
+
+        <option value="price-desc">
+            Price: High to Low
+        </option>
+
+        <option value="rating">
+            Rating
+        </option>
+
+        <option value="title">
+            Title A-Z
+        </option>
+
+    </select>
+
+
+    <h2>Statistics</h2>
+
+    <div id="statistics"></div>
+
+
+    <h2>Products</h2>
+
+    <div id="products"></div>
+
+
+    <script
+        type="module"
+        src="js/main.js">
+    </script>
+
+</body>
+</html>

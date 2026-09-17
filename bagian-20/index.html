@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bagian 20 - Modern JavaScript</title>
+</head>
+<body>
+
+    <h1>Modern JavaScript (ES6+)</h1>
+
+    <script>
+        const products = [
+            {
+                title: "Laptop",
+                price: 8000000,
+                stock: 10,
+                rating: 4.5
+            },
+            {
+                title: "Mouse",
+                price: 150000,
+                stock: 20,
+                rating: 4.2
+            },
+            {
+                title: "Keyboard",
+                price: 500000,
+                stock: 15,
+                rating: 4.7
+            }
+        ];
+
+        function getStatistics(products) {
+            const totalProducts = products.length;
+
+            const totalPrice = products.reduce(
+                (sum, { price }) => sum + price,
+                0
+            );
+
+            const averagePrice = totalPrice / totalProducts;
+
+            const highestPrice = Math.max(
+                ...products.map(({ price }) => price)
+            );
+
+            const lowestPrice = Math.min(
+                ...products.map(({ price }) => price)
+            );
+
+            const totalStock = products.reduce(
+                (sum, { stock }) => sum + stock,
+                0
+            );
+
+            const totalRating = products.reduce(
+                (sum, { rating }) => sum + (rating ?? 0),
+                0
+            );
+
+            const averageRating = totalRating / totalProducts;
+
+            return {
+                totalProducts,
+                averagePrice,
+                highestPrice,
+                lowestPrice,
+                totalStock,
+                averageRating
+            };
+        }
+
+        console.log(getStatistics(products));
+    </script>
+
+</body>
+</html>

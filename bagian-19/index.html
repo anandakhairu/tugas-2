@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bagian 19 - Event Handling</title>
+</head>
+<body>
+
+    <h1>Event Handling</h1>
+
+    <!-- Search -->
+    <input 
+        type="text" 
+        id="search-input" 
+        placeholder="Cari produk..."
+    >
+
+    <!-- Category -->
+    <select id="category-select">
+        <option value="all">Semua Kategori</option>
+        <option value="Elektronik">Elektronik</option>
+        <option value="Alat Tulis">Alat Tulis</option>
+    </select>
+
+    <!-- Sort -->
+    <select id="sort-select">
+        <option value="default">Urutan Default</option>
+        <option value="name">Nama A-Z</option>
+    </select>
+
+    <div id="products"></div>
+
+    <script>
+        const state = {
+            products: [
+                {
+                    name: "Laptop",
+                    category: "Elektronik"
+                },
+                {
+                    name: "Mouse",
+                    category: "Elektronik"
+                },
+                {
+                    name: "Buku",
+                    category: "Alat Tulis"
+                }
+            ],
+            search: "",
+            category: "all",
+            sortBy: "default",
+            favorites: [],
+            status: "idle"
+        };
+
+        function renderProducts(products) {
+            const container = document.querySelector("#products");
+
+            container.innerHTML = products.map(product => `
+                <div>
+                    <h3>${product.name}</h3>
+                    <p>Kategori: ${product.category}</p>
+                </div>
+            `).join("");
+        }
+
+        function render() {
+            let result = [...state.products];
+
+            // Filter search
+            if (state.search) {
+                result = result.filter(product =>
+                    product.name
+                        .toLowerCase()
+                        .includes(state.search.toLowerCase())
+                );
+            }
+
+            // Filter category
+            if (state.category !== "all") {
+                result = result.filter(product =>
+                    product.category === state.category
+                );
+            }
+
+            // Sorting
+            if (state.sortBy === "name") {
+                result.sort((a, b) =>
+                    a.name.localeCompare(b.name)
+                );
+            }
+
+            renderProducts(result);
+        }
+
+        // Event search
+        const searchInput = document.querySelector("#search-input");
+
+        searchInput.addEventListener("input", (e) => {
+            state.search = e.target.value;
+            render();
+        });
+
+        // Event category
+        const categorySelect = document.querySelector("#category-select");
+
+        categorySelect.addEventListener("change", (e) => {
+            state.category = e.target.value;
+            render();
+        });
+
+        // Event sorting
+        const sortSelect = document.querySelector("#sort-select");
+
+        sortSelect.addEventListener("change", (e) => {
+            state.sortBy = e.target.value;
+            render();
+        });
+
+        // Render pertama kali
+        render();
+    </script>
+
+</body>
+</html>

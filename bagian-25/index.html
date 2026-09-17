@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bagian 25 - API Data Processing</title>
+</head>
+<body>
+
+    <h1>API Data Processing</h1>
+
+    <h2>Statistics</h2>
+    <div id="statistics"></div>
+
+    <h2>Category Analytics</h2>
+    <div id="categories"></div>
+
+    <h2>Product Search</h2>
+
+    <input
+        type="text"
+        id="search-input"
+        placeholder="Masukkan keyword..."
+    >
+
+    <select id="search-mode">
+        <option value="exact">Exact Search</option>
+        <option value="partial">Partial Search</option>
+        <option value="case-insensitive">Case-Insensitive Search</option>
+    </select>
+
+    <button id="search-button">Search</button>
+
+    <div id="search-result"></div>
+
+    <script>
+        let products = [];
+
+        // =========================
+        // FETCH DATA
+        // =========================
+
+        async function fetchProducts() {
+            const response = await fetch(
+                "https://dummyjson.com/products?limit=30"
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    `HTTP error: ${response.status}`
+                );
+            }
+
+            const data = await response.json();
+
+            return data.products;
+        }
+
+
+        // =========================
+        // 25.1 STATISTICS
+        // =========================
+
+        function getStatistics(products) {
+            const totalProducts = products.length;
+
+            const totalPrice = products.reduce(
+                (sum, product) => sum + product.price,
+                0
+            );
+
+            const averagePrice =
+                totalPrice / totalProducts;
+
+            const highestPrice = Math.max(
+                ...products.map(product => product.price)
+            );
+
+            const lowestPrice = Math.min(
+                ...products.map(product => product.price)
+            );
+
+            const totalStock = products.reduce(
+                (sum, product) => sum + product.stock,
+                0
+            );
+
+            const totalRating = products.reduce(
+                (sum, product) => sum + product.rating,
+                0
+            );
+
+            const averageRating =
+                totalRating / totalProducts;
+
+            return {
+                totalProducts,
+                averagePrice,
+                highestPrice,
+                lowestPrice,
+                totalStock,
+                averageRating
+            };
+        }
+
+
+        function renderStatistics(statistics) {
+            const container =
+                document.querySelector("#statistics");
+
+            container.innerHTML = `
+                <p>Total Products: ${statistics.totalProducts}</p>
+                <p>Average Price: $${statistics.averagePrice.toFixed(2)}</p>
+                <p>Highest Price: $${statistics.highestPrice}</p>
+                <p>Lowest Price: $${statistics.lowestPrice}</p>
+                <p>Total Stock: ${statistics.totalStock}</p>
+                <p>Average Rating: ${statistics.averageRating.toFixed(2)}</p>
+            `;
+        }
+
+
+        // =========================
+        // 25.2 CATEGORY ANALYTICS
+        // =========================
+
+        function getCategoryAnalytics(products) {
+            const categories = {};
+
+            products.forEach(product => {
+                const category = product.category;
+
+                if (!categories[category]) {
+                    categories[category] = {
+                        count: 0,
+                        totalPrice: 0,
+                        totalRating: 0,
+                        totalStock: 0
+                    };
+                }
+
+                categories[category].count++;
+                categories[category].totalPrice += product.price;
+                categories[category].totalRating += product.rating;
+                categories[category].totalStock += product.stock;
+            });
+
+            return categories;
+        }
+
+
+        function renderCategoryAnalytics(categories) {
+            const container =
+                document.querySelector("#categories");
+
+            container.innerHTML = Object.entries(categories)
+                .map(([category, data]) => `
+                    <div>
+                        <h3>${category}</h3>
+                        <p>Jumlah Produk: ${data.count}</p>
+                        <p>
+                            Rata-rata Harga:
+                            $${(data.totalPrice / data.count).toFixed(2)}
+                        </p>
+                        <p>
+                            Rata-rata Rating:
+                            ${(data.totalRating / data.count).toFixed(2)}
+                        </p>
+                        <p>Total Stok: ${data.totalStock}</p>
+                    </div>
+                    <hr>
+                `)
+                .join("");
+        }
+
+
+        // =========================
+        // 25.3 PRODUCT SEARCH
+        // =========================
+
+        function exactSearch(products, keyword) {
+            return products.filter(
+                product => product.title === keyword
+            );
+        }
+
+
+        function partialSearch(products, keyword) {
+            const lower = keyword.toLowerCase();
+
+            return products.filter(
+                product =>
+                    product.title
+                        .toLowerCase()
+                        .includes(lower)
+            );
+        }
+
+
+        function caseInsensitiveSearch(products, keyword) {
+            const lower = keyword.toLowerCase();
+
+            return products.filter(
+                product =>
+                    product.title.toLowerCase() === lower
+            );
+        }
+
+
+        function renderSearchResult(products) {
+            const container =
+                document.querySelector("#search-result");
+
+            if (products.length === 0) {
+                container.innerHTML =
+                    "<p>Produk tidak ditemukan.</p>";
+                return;
+            }
+
+            container.innerHTML = products
+                .map(product => `
+                    <div>
+                        <h3>${product.title}</h3>
+                        <p>Harga: $${product.price}</p>
+                        <p>Kategori: ${product.category}</p>
+                    </div>
+                    <hr>
+                `)
+                .join("");
+        }
+
+
+        // =========================
+        // SEARCH EVENT
+        // =========================
+
+        document
+            .querySelector("#search-button")
+            .addEventListener("click", () => {
+
+                const keyword =
+                    document.querySelector("#search-input").value;
+
+                const mode =
+                    document.querySelector("#search-mode").value;
+
+                let result = [];
+
+                if (mode === "exact") {
+                    result = exactSearch(products, keyword);
+                }
+
+                if (mode === "partial") {
+                    result = partialSearch(products, keyword);
+                }
+
+                if (mode === "case-insensitive") {
+                    result = caseInsensitiveSearch(
+                        products,
+                        keyword
+                    );
+                }
+
+                renderSearchResult(result);
+            });
+
+
+        // =========================
+        // LOAD DATA
+        // =========================
+
+        async function loadProducts() {
+            try {
+                products = await fetchProducts();
+
+                const statistics =
+                    getStatistics(products);
+
+                renderStatistics(statistics);
+
+                const categories =
+                    getCategoryAnalytics(products);
+
+                renderCategoryAnalytics(categories);
+
+            } catch (error) {
+                console.error(
+                    "Gagal mengambil data:",
+                    error
+                );
+            }
+        }
+
+        loadProducts();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bagian 24 - Fetch API</title>
+</head>
+<body>
+
+    <h1>Product Explorer</h1>
+
+    <div id="status"></div>
+    <div id="products"></div>
+
+    <script>
+        const state = {
+            products: [],
+            status: "idle"
+        };
+
+        const statusElement = document.querySelector("#status");
+        const productsElement = document.querySelector("#products");
+
+        function render() {
+            // Tampilan loading
+            if (state.status === "loading") {
+                statusElement.textContent = "Loading...";
+                productsElement.innerHTML = "";
+                return;
+            }
+
+            // Tampilan error
+            if (state.status === "error") {
+                statusElement.textContent =
+                    "Gagal mengambil data produk.";
+                productsElement.innerHTML = "";
+                return;
+            }
+
+            // Jika berhasil
+            statusElement.textContent = "";
+
+            productsElement.innerHTML = state.products
+                .map(product => `
+                    <div>
+                        <h3>${product.title}</h3>
+                        <p>Harga: $${product.price}</p>
+                        <p>Kategori: ${product.category}</p>
+                    </div>
+                    <hr>
+                `)
+                .join("");
+        }
+
+        async function fetchProducts() {
+            try {
+                const response = await fetch(
+                    "https://dummyjson.com/products?limit=30"
+                );
+
+                if (!response.ok) {
+                    throw new Error(
+                        `HTTP error: ${response.status}`
+                    );
+                }
+
+                const data = await response.json();
+
+                return data.products;
+
+            } catch (error) {
+                console.error(
+                    "Gagal mengambil data:",
+                    error
+                );
+
+                throw error;
+            }
+        }
+
+        async function loadProducts() {
+            // Tampilkan loading
+            state.status = "loading";
+            render();
+
+            try {
+                // Ambil data dari API
+                const products = await fetchProducts();
+
+                // Simpan ke state
+                state.products = products;
+                state.status = "success";
+
+            } catch (error) {
+                // Jika fetch gagal
+                state.status = "error";
+            }
+
+            // Render berdasarkan state terbaru
+            render();
+        }
+
+        loadProducts();
+    </script>
+
+</body>
+</html>

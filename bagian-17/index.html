@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+</head>
+<body>
+
+    <div id="product-list"></div>
+
+    <script>
+        const products = [
+            {
+                title: "Laptop",
+                category: "Electronics",
+                price: 999,
+                rating: 4.5,
+                thumbnail: "https://via.placeholder.com/150"
+            },
+            {
+                title: "Smartphone",
+                category: "Electronics",
+                price: 599,
+                rating: 4.3,
+                thumbnail: "https://via.placeholder.com/150"
+            },
+            {
+                title: "Headphones",
+                category: "Electronics",
+                price: 99,
+                rating: 4.2,
+                thumbnail: "https://via.placeholder.com/150"
+            },
+            {
+                title: "Keyboard",
+                category: "Accessories",
+                price: 49,
+                rating: 4.4,
+                thumbnail: "https://via.placeholder.com/150"
+            },
+            {
+                title: "Mouse",
+                category: "Accessories",
+                price: 29,
+                rating: 4.1,
+                thumbnail: "https://via.placeholder.com/150"
+            }
+        ];
+
+        function renderProducts(products) {
+            const container = document.querySelector("#product-list");
+            container.innerHTML = "";
+
+            for (const product of products) {
+                const card = document.createElement("div");
+                card.classList.add("product-card");
+
+                card.innerHTML = `
+                    <img src="${product.thumbnail}" alt="${product.title}">
+                    <h3>${product.title}</h3>
+                    <p>${product.category}</p>
+                    <p>Harga: $${product.price}</p>
+                    <p>Rating: ${product.rating}</p>
+                `;
+
+                container.append(card);
+            }
+        }
+
+        renderProducts(products);
+    </script>
+
+</body>
+</html>

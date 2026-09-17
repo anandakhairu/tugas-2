@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bagian 23 - Async/Await</title>
+</head>
+<body>
+
+    <h1>Async/Await</h1>
+
+    <script>
+        const state = {
+            products: [],
+            status: "idle"
+        };
+
+        function render() {
+            console.log("Status:", state.status);
+            console.log("Products:", state.products);
+        }
+
+        function getProducts() {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    const products = [
+                        {
+                            title: "Laptop",
+                            price: 8000000
+                        },
+                        {
+                            title: "Mouse",
+                            price: 150000
+                        },
+                        {
+                            title: "Keyboard",
+                            price: 500000
+                        }
+                    ];
+
+                    resolve(products);
+                }, 1000);
+            });
+        }
+
+        async function loadProducts() {
+            state.status = "loading";
+            render();
+
+            try {
+                const products = await getProducts();
+
+                state.products = products;
+                state.status = "success";
+            } catch (error) {
+                state.status = "error";
+                console.error(error);
+            } finally {
+                render();
+            }
+        }
+
+        loadProducts();
+    </script>
+
+</body>
+</html>
